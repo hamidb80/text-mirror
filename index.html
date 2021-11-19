@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>آینه متن</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+
+<body>
+  <h2>نرم افزار برعکس کردن کلمه</h2>
+  <textarea id="textbox" cols="30" rows="10" placeholder="محل تایپ"></textarea>
+  <textarea id="result" cols="30" rows="10" placeholder="نتیجه" disabled></textarea>
+  <button onclick="getReverseByWord()"> براساس کلمه </button>
+  <button onclick="getReverseByChar()"> براساس حرف </button>
+</body>
+<script>
+  function reverseByWord(text) {
+    return text.split("\n")
+
+      .map(line => line
+        .split(' ')
+        .reverse()
+        .join(' ')
+      )
+      .join('\n')
+  }
+  function reverseByChar(text) {
+    return text.split("\n")
+      .map(line => line.split("").reverse().join(""))
+      .join('\n')
+  }
+
+  function getReverseByWord() {
+    document.getElementById("result").value = reverseByWord(
+      document.getElementById("textbox").value
+    )
+  }
+  function getReverseByChar() {
+    document.getElementById("result").value = reverseByChar(
+      document.getElementById("textbox").value
+    )
+  }
+</script>
+<style>
+  h2 {
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  textarea {
+    display: block;
+    width: 80%;
+    font-size: 20px;
+    direction: rtl;
+    padding: 14px;
+  }
+
+  button {
+    font-weight: bold;
+    font-size: 18px;
+  }
+</style>
+
+</html>
