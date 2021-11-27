@@ -10,10 +10,41 @@
   <h2>نرم افزار برعکس سازی متن</h2>
   <textarea id="textbox" cols="30" rows="10" placeholder="محل تایپ"></textarea>
   <textarea id="result" cols="30" rows="10" placeholder="نتیجه" disabled></textarea>
-  <button onclick="getReverseByWord()"> براساس کلمه </button>
-  <button onclick="getReverseByChar()"> براساس حرف </button>
+  <button id="by-word" onclick="getReverseByWord()"> براساس کلمه </button>
+  <button id="by-char" onclick="getReverseByChar()"> براساس حرف </button>
+  <div>
+    <span>تغییر جهت علامت</span>
+    <input type="checkbox" id="flipped">
+  </div>
+  <div>
+    <input type="number" id="font-size" onchange="changeFont()" value="20">
+  </div>
+  <div>
+    <input type="text" id="font-familiy" onchange="changeFont()" value="tahoma">
+  </div>
 </body>
+<style id="global-style"> </style>
 <script>
+  function el(id) {
+    return document.getElementById(id)
+  }
+  function setStyle(fnz, fnf) {
+    const style = `
+    * {
+      font-familiy: "${fnf}";
+      font-size: ${fnz}px;
+    }`
+    el("global-style").innerHTML = style
+  }
+  function changeFont() {
+    setStyle(
+      el("font-size").value,
+      el("font-familiy").value,
+    )
+  }
+  function flipEnabled() {
+    return el("flipped").checked
+  }
   function reverseByWord(text) {
     return text.split("\n")
 
@@ -30,22 +61,39 @@
       .join('\n')
   }
 
+  const flipper = {
+    '[': ']',
+    ']': '[',
+    '(': ')',
+    ')': '(',
+    '<': '>',
+    '>': '<',
+    '{': '}',
+    '}': '{',
+  }
+  function flipChar(text) {
+    return text.replace(/[\[\]\(\)\<\>\{\}]/gmi, c => flipper[c])
+  }
+
+  function applyFlip(text) {
+    return flipEnabled() ? flipChar(text) : text
+  }
+
   function getReverseByWord() {
-    document.getElementById("result").value = reverseByWord(
-      document.getElementById("textbox").value
+    el("result").value = reverseByWord(
+      applyFlip(el("textbox").value)
     )
   }
   function getReverseByChar() {
-    document.getElementById("result").value = reverseByChar(
-      document.getElementById("textbox").value
+    el("result").value = reverseByChar(
+      applyFlip(el("textbox").value)
     )
   }
+
+
+  changeFont()
 </script>
 <style>
-  h2 {
-    font-family: 'Courier New', Courier, monospace;
-  }
-
   body {
     display: flex;
     flex-direction: column;
@@ -56,14 +104,12 @@
   textarea {
     display: block;
     width: 80%;
-    font-size: 20px;
     direction: rtl;
     padding: 14px;
   }
 
   button {
     font-weight: bold;
-    font-size: 18px;
   }
 </style>
 
